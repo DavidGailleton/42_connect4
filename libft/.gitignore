@@ -54,5 +54,4 @@ dkms.conf
 # debug information files
 *.dwo
 
-#bin
-connect4
+libft.a
