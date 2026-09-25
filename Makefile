@@ -12,6 +12,7 @@ P_LIBFT = libft/
 
 SRC =  \
 	main.c \
+	parsing.c
 
 SRCS = $(addprefix $(P_SRC), $(SRC))
 OBJS = $(patsubst $(P_SRC)%.c,$(P_OBJ)%.o,$(SRCS))
