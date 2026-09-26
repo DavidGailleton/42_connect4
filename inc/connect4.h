@@ -3,6 +3,7 @@
 
 #include "libft.h"
 #include <stdlib.h>
+#include <time.h>
 
 #define COLOR_RESET "\033[0m"
 #define COLOR_BOLD "\033[1m"
@@ -22,12 +23,15 @@
 #define INVALID_COLUMN_LEN 3
 #define INVALID_INT_ARGS 4
 
+#define MCTS_UCB1_CONST 5
+
 typedef struct s_board {
 	unsigned int size_x;
 	unsigned int size_y;
 	unsigned char **array;
 } t_board;
 
+unsigned int ai_choose_column(t_board *board);
 int check_args(int ac, char *av[]);
 int is_overflow_underflow(char *s_int);
 t_board *init_board(int size_x, int size_y);

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/26 10:57:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/26 11:52:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/26 14:53:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static unsigned int get_column_to_play(t_board *board) {
 
 static void play_token(t_board *board, unsigned int column,
 					   unsigned char player) {
+
 	unsigned int row;
 
 	row = board->size_y - 1;
@@ -60,7 +61,8 @@ static void play_token(t_board *board, unsigned int column,
 	board->array[row][column] = player == 1 ? 'O' : 'X';
 }
 
-static unsigned int play_round(t_board *board, unsigned char player) {
+static unsigned int play_round(t_board *board, unsigned char player,
+							   unsigned char ai) {
 	unsigned int column;
 
 	if (player == 1)
@@ -72,7 +74,13 @@ static unsigned int play_round(t_board *board, unsigned char player) {
 	ft_putstr_fd("'s turn\n", 1);
 	ft_putstr_fd(COLOR_RESET, 1);
 	print_board(board);
-	column = get_column_to_play(board);
+
+	if (player == ai)
+		column = ai_choose_column(board);
+	else
+		column = get_column_to_play(board);
+	// (void)ai;
+	// (void)get_column_to_play;
 	play_token(board, column - 1, player);
 	return (column);
 }
@@ -164,18 +172,22 @@ static unsigned char not_end_game(t_board *board, unsigned int last_column) {
 }
 
 void game(int size_x, int size_y) {
+
 	unsigned int last_column;
 	int round;
+	unsigned char ai;
 	unsigned char player;
 	t_board *board;
 
+	ai = 2;
 	round = 0;
 	board = init_board(size_x, size_y);
 	last_column = 0;
 	while (not_end_game(board, last_column)) {
 		player = (round % 2) + 1;
-		last_column = play_round(board, player);
+		last_column = play_round(board, player, ai);
 		round++;
 	}
+	ft_putstr_fd("\nResult:\n", 1);
 	print_board(board);
 }

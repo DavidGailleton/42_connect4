@@ -11,6 +11,7 @@ P_INC = inc/
 P_LIBFT = libft/
 
 SRC	=	main.c 		\
+		ai.c		\
 		board.c		\
 		game.c		\
 		parsing.c
