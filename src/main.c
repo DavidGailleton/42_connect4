@@ -12,8 +12,9 @@ int main(int argc, char *argv[]) {
 		write(2, "2 args is expected: ./connect4 {nb_row} {nb_collumn}\n", 53);
 		return (EXIT_FAILURE);
 	case INVALID_INT_ARGS:
-		write(2, "Args should only be valid integer:\nExample: ./connect4 8 10\n",
-					60);
+		write(2,
+			  "Args should only be valid integer:\nExample: ./connect4 8 10\n",
+			  60);
 		return (EXIT_FAILURE);
 	case INVALID_ROW_LEN:
 		write(2, "Row arg should be minimum 6\n", 28);
