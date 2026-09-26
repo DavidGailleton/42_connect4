@@ -1,5 +1,5 @@
-#include "../inc/connect4.h"
-#include "../libft/libft.h"
+#include "connect4.h"
+#include "libft.h"
 #include <limits.h>
 #include <stddef.h>
 

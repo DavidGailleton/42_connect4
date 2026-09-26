@@ -10,9 +10,10 @@ P_OBJ = .obj/
 P_INC = inc/
 P_LIBFT = libft/
 
-SRC =  \
-	main.c \
-	parsing.c
+SRC	=	main.c 		\
+		board.c		\
+		game.c		\
+		parsing.c
 
 SRCS = $(addprefix $(P_SRC), $(SRC))
 OBJS = $(patsubst $(P_SRC)%.c,$(P_OBJ)%.o,$(SRCS))
@@ -47,3 +48,4 @@ debug:
 
 -include $(DEPS)
 
+.SILENT:
