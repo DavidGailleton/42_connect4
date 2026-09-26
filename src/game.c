@@ -65,20 +65,23 @@ static unsigned int play_round(t_board *board, unsigned char player,
 							   unsigned char ai) {
 	unsigned int column;
 
-	if (player == 1)
+	if (player == 1) {
 		ft_putstr_fd(COLOR_RED, 1);
-	else
+		select_col_ab(board, 'X');
+	} else {
 		ft_putstr_fd(COLOR_BLUE, 1);
+		select_col_ab(board, 'O');
+	}
 	ft_putstr_fd("\nPlayer ", 1);
 	ft_putstr_fd(player == 1 ? "1" : "2", 1);
 	ft_putstr_fd("'s turn\n", 1);
 	ft_putstr_fd(COLOR_RESET, 1);
 	print_board(board);
 
-	if (player == ai)
-		column = ai_choose_column(board);
-	else
-		column = get_column_to_play(board);
+	// if (player == ai)
+	column = ai_choose_column(board);
+	// else
+	// column = get_column_to_play(board);
 	// (void)ai;
 	// (void)get_column_to_play;
 	play_token(board, column - 1, player);

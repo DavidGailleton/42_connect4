@@ -14,7 +14,8 @@ SRC	=	main.c 		\
 		ai.c		\
 		board.c		\
 		game.c		\
-		parsing.c
+		parsing.c \
+		alphabeta.c
 
 SRCS = $(addprefix $(P_SRC), $(SRC))
 OBJS = $(patsubst $(P_SRC)%.c,$(P_OBJ)%.o,$(SRCS))
