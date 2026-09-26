@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
 	default:
 		break;
 	}
+	srand((unsigned int)time(NULL));
 	game(ft_atoi(argv[2]), ft_atoi(argv[1]));
 	return (EXIT_SUCCESS);
 }

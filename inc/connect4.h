@@ -2,6 +2,7 @@
 # define CONNECT4
 
 # include <stdlib.h>
+# include <time.h>
 # include "libft.h"
 
 # define COLOR_RESET	"\033[0m"
@@ -22,6 +23,8 @@
 # define INVALID_COLUMN_LEN 3
 # define INVALID_INT_ARGS 4
 
+# define MCTS_UCB1_CONST 5
+
 typedef struct	s_board
 {
 	unsigned int	size_x;
@@ -29,10 +32,11 @@ typedef struct	s_board
 	unsigned char**	array;
 }				t_board;
 
-int			check_args(int ac, char *av[]);
-int			is_overflow_underflow(char *s_int);
-t_board*	init_board(int size_x, int size_y);
-void		game(int size_x, int size_y);
-void		print_board(t_board* board);
+unsigned int	ai_choose_column(t_board* board);
+int				check_args(int ac, char *av[]);
+int				is_overflow_underflow(char *s_int);
+t_board*		init_board(int size_x, int size_y);
+void			game(int size_x, int size_y);
+void			print_board(t_board* board);
 
 #endif // !CONNECT4
