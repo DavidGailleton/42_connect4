@@ -64,13 +64,14 @@ static void play_token(t_board *board, unsigned int column,
 static unsigned int play_round(t_board *board, unsigned char player,
 							   unsigned char ai) {
 	unsigned int column;
+	unsigned char piece;
 
 	if (player == 1) {
+		piece = 'O';
 		ft_putstr_fd(COLOR_RED, 1);
-		select_col_ab(board, 'X');
 	} else {
+		piece = 'X';
 		ft_putstr_fd(COLOR_BLUE, 1);
-		select_col_ab(board, 'O');
 	}
 	ft_putstr_fd("\nPlayer ", 1);
 	ft_putstr_fd(player == 1 ? "1" : "2", 1);
@@ -78,12 +79,14 @@ static unsigned int play_round(t_board *board, unsigned char player,
 	ft_putstr_fd(COLOR_RESET, 1);
 	print_board(board);
 
-	// if (player == ai)
-	column = ai_choose_column(board);
-	// else
-	// column = get_column_to_play(board);
+	if (player == ai)
+		column = select_col_ab(board, piece) + 1;
+	else
+		column = select_col_ab(board, piece) + 1;
+	// column = ai_choose_column(board);
 	// (void)ai;
 	// (void)get_column_to_play;
+	// printf("Selected col: %d\n", column);
 	play_token(board, column - 1, player);
 	return (column);
 }
