@@ -23,7 +23,7 @@
 #define INVALID_COLUMN_LEN 3
 #define INVALID_INT_ARGS 4
 
-#define MCTS_UCB1_CONST 5
+#define MCTS_UCB1_CONST 100
 
 typedef struct s_board {
 	unsigned int size_x;
@@ -31,11 +31,27 @@ typedef struct s_board {
 	unsigned char **array;
 } t_board;
 
-unsigned int ai_choose_column(t_board *board);
-int check_args(int ac, char *av[]);
-int is_overflow_underflow(char *s_int);
-t_board *init_board(int size_x, int size_y);
-void game(int size_x, int size_y);
-void print_board(t_board *board);
+typedef struct	s_tree
+{
+	long int		column;
+	unsigned int	visits;
+	unsigned int	victories;
+	struct s_tree**	children;
+}				t_tree;
+
+typedef struct	s_stat
+{
+	unsigned int	victories;
+	unsigned int	visits;
+}				t_stat;
+
+unsigned int	ai_choose_column(t_board *board);
+int				check_args(int ac, char *av[]);
+int				is_overflow_underflow(char *s_int);
+unsigned char	end_game(t_board *board, unsigned int last_column);
+t_board*		init_board(int size_x, int size_y);
+void			game(int size_x, int size_y);
+void			print_board(t_board *board);
+void			play_token(t_board *board, unsigned int column, unsigned char player);
 
 #endif // !CONNECT4
