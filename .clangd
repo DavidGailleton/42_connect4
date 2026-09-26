@@ -5,8 +5,8 @@ CompileFlags:
     - "-Wall"
     - "-Wextra"
     - "-Werror"
-    - "-I./inc"
-    - "-I./libft"
+    - "-I/home/dgaillet/Documents/connect4/inc"
+    - "-I/home/dgaillet/Documents/connect4/libft"
 
 Diagnostics:
   UnusedIncludes: None
