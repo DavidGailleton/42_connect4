@@ -2,7 +2,7 @@
 #include <limits.h>
 #include <stdio.h>
 
-const int MAX_DEPTH = 7;
+const int MAX_DEPTH = 5;
 const int WIN_SCORE = 100000;
 
 static unsigned int col_order(t_board *board, unsigned int i) {
@@ -113,7 +113,7 @@ static int score_window(t_board *board, int row, int col, int d_row, int d_col,
 
 static int evaluate(t_board *board, unsigned char ai) {
 	int score = 0;
-	int dirs[4][2] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
+	static const int dirs[4][2] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
 
 	for (int row = 0; row < (int)board->size_y; row++)
 		for (int col = 0; col < (int)board->size_x; col++)

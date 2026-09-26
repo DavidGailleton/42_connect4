@@ -82,8 +82,8 @@ static unsigned int play_round(t_board *board, unsigned char player,
 	if (player == ai)
 		column = select_col_ab(board, piece) + 1;
 	else
-		column = select_col_ab(board, piece) + 1;
-	// column = ai_choose_column(board);
+		// column = select_col_ab(board, piece) + 1;
+		column = ai_choose_column(board);
 	// (void)ai;
 	// (void)get_column_to_play;
 	// printf("Selected col: %d\n", column);
