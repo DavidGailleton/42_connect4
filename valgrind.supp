@@ -1,0 +1,21 @@
+{
+    mlx - Malloc
+    Memcheck:Leak
+    match-leak-kinds:reachable
+    fun:malloc
+}
+
+{
+    mlx - Calloc
+    Memcheck:Leak
+    match-leak-kinds:reachable
+    fun:calloc
+}
+
+{
+    mlx - Realloc
+    Memcheck:Leak
+    match-leak-kinds:reachable
+    fun:realloc
+}
+

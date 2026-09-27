@@ -7,6 +7,7 @@ CompileFlags:
     - "-Werror"
     - "-I/home/dgaillet/Documents/connect4/inc"
     - "-I/home/dgaillet/Documents/connect4/libft"
+    - "-I/home/dgaillet/Documents/connect4/mlx"
 
 Diagnostics:
   UnusedIncludes: None
