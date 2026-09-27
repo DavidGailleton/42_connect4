@@ -14,7 +14,6 @@
 #include "libft.h"
 #include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 static unsigned char column_full(t_board *board, unsigned int column) {
 	unsigned int row;
@@ -76,7 +75,8 @@ static long int play_round(t_board *board, unsigned char player,
 	ft_putstr_fd(COLOR_RESET, 1);
 	print_board(board);
 	if (player != ai)
-		column = get_column_to_play(board) - 1;
+		// column = get_column_to_play(board) - 1;
+		column = mcts_choose_column(board);
 	else if (board->size_x <= MAXSIZE_MINIMAX)
 		column = select_col_ab(board, player == 1 ? 'O' : 'X');
 	else {
@@ -110,9 +110,6 @@ static unsigned char board_full(t_board *board) {
 }
 
 static unsigned char four_connected(t_board *board, unsigned int last_column) {
-	if (last_column == 0)
-		return (0);
-
 	unsigned int last_row;
 	for (last_row = 0;
 		 last_row < board->size_y && board->array[last_row][last_column] == '.';

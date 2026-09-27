@@ -2,45 +2,23 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
 
 const int MAX_DEPTH = 5;
 const int WIN_SCORE = 100000;
 
-static double ft_log2(double x) {
-	union {
-		double d;
-		uint64_t u;
-	} bits;
-	int64_t exponent;
-	double mantissa;
-	double frac;
-	int i;
-
-	bits.d = x;
-	exponent = (int64_t)((bits.u >> 52) & 0x7FF) - 1023;
-	bits.u = (bits.u & 0x000FFFFFFFFFFFFFULL) | 0x3FF0000000000000ULL;
-	mantissa = bits.d;
-
-	frac = 0.0;
-	i = 0;
-	while (i < 32) {
-		mantissa = mantissa * mantissa;
-		if (mantissa >= 2.0) {
-			frac += 1.0 / (double)(1ULL << (i + 1));
-			mantissa /= 2.0;
-		}
-		i++;
-	}
-	return ((double)exponent + frac);
-}
-
 static int get_max_depth(t_board *board) {
-	size_t size = (size_t)board->size_x * (size_t)board->size_y;
+	if (board->size_x < 8)
+		return (9);
+	else if (board->size_x < 10)
+		return (8);
+	else if (board->size_x < 12)
+		return (7);
+	else if (board->size_x < 14)
+		return (6);
+	else if (board->size_x < 16)
+		return (5);
 
-	if (size <= 1)
-		return (0);
-	return ((int)(20.0 - 2 * ft_log2((double)size) + 1e-12));
+	return (4);
 }
 
 static unsigned int col_order(t_board *board, unsigned int i) {
@@ -237,8 +215,6 @@ unsigned int select_col_ab(t_board *board, unsigned char piece) {
 								   piece, max_depth - 1);
 
 		remove_piece(board, col);
-		// printf("col %d: %d\n", col, temp_score);
-		//
 		if (temp_score > max_score) {
 			col_max = col;
 			max_score = temp_score;
