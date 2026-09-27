@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/26 10:57:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/26 14:53:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/27 15:39:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,8 @@ static unsigned int get_column_to_play(t_board *board) {
 	}
 }
 
-static void play_token(t_board *board, unsigned int column,
-					   unsigned char player) {
-
+void play_token(t_board *board, unsigned int column, unsigned char player)
+{
 	unsigned int row;
 
 	row = board->size_y - 1;
@@ -62,32 +61,36 @@ static void play_token(t_board *board, unsigned int column,
 	board->array[row][column] = player == 1 ? 'O' : 'X';
 }
 
-static unsigned int play_round(t_board *board, unsigned char player,
-							   unsigned char ai) {
-	unsigned int column;
-	unsigned char piece;
+static long int play_round(t_board *board, unsigned char player, 	\
+		unsigned char ai)
+{
+	long int		tmp;
+	unsigned int	column;
 
-	if (player == 1) {
-		piece = 'O';
+	if (player == 1)
 		ft_putstr_fd(COLOR_RED, 1);
-	} else {
-		piece = 'X';
+	else
 		ft_putstr_fd(COLOR_BLUE, 1);
-	}
 	ft_putstr_fd("\nPlayer ", 1);
 	ft_putstr_fd(player == 1 ? "1" : "2", 1);
 	ft_putstr_fd("'s turn\n", 1);
 	ft_putstr_fd(COLOR_RESET, 1);
 	print_board(board);
-
-	if (player == ai)
-		column = select_col_ab(board, piece) + 1;
+	if (player != ai)
+		column = get_column_to_play(board) - 1;
+	else if (board->size_x <= MAXSIZE_MINIMAX)
+		column = select_col_ab(board, player == 1 ? 'O' : 'X');
 	else
-		column = get_column_to_play(board);
-	// (void)ai;
-	// (void)get_column_to_play;
-	// printf("Selected col: %d\n", column);
-	play_token(board, column - 1, player);
+	{
+		tmp = mcts_choose_column(board);
+		if (tmp == -1)
+			return (-1);
+		column = (unsigned int)tmp;
+	}
+	play_token(board, column, player);
+	ft_putstr_fd("\ncolumn chosen: ", 1);
+	ft_putnbr_fd(column, 1);
+	ft_putstr_fd("\n", 1);
 	return (column);
 }
 
@@ -111,7 +114,6 @@ static unsigned char board_full(t_board *board) {
 static unsigned char four_connected(t_board *board, unsigned int last_column) {
 	if (last_column == 0)
 		return (0);
-	last_column--;
 
 	unsigned int last_row;
 	for (last_row = 0;
@@ -170,26 +172,44 @@ static unsigned char four_connected(t_board *board, unsigned int last_column) {
 	return (0);
 }
 
-static unsigned char not_end_game(t_board *board, unsigned int last_column) {
-	if (board_full(board) || four_connected(board, last_column))
-		return (0);
-	return (1);
-	(void)last_column;
+unsigned char	end_game(t_board *board, unsigned int last_column)
+{
+	unsigned char	last_player;
+
+	last_player = four_connected(board, last_column);
+	if (last_player)
+		return (last_player == 'O' ? 1 : 2);
+	if (board_full(board))
+		return (3);
+	return (0);
 }
 
-void game(int size_x, int size_y) {
+void game(int size_x, int size_y)
+{
 
-	unsigned int last_column;
-	unsigned char ai;
-	unsigned char player = rand() % 2;
-	t_board *board;
+	long int		tmp;
+	unsigned int	last_column;
+	unsigned int	round;
+	unsigned char	ai;
+	unsigned char	player;
+	t_board*		board;
 
-	ai = 1;
+	ai = rand() % 2 + 1;
 	board = init_board(size_x, size_y);
 	last_column = 0;
-	while (not_end_game(board, last_column)) {
-		last_column = play_round(board, player, ai);
-		player = !player;
+	round = 0;
+	while (!end_game(board, last_column))
+	{
+		player = (round % 2) + 1;
+		tmp = play_round(board, player, ai);
+		if (tmp == -1)
+		{
+			ft_putstr_fd("Error during play_round. Exiting game.\n", 1);
+			free_board(board);
+			return;
+		}
+		last_column = (unsigned int)tmp;
+		round++;
 	}
 	ft_putstr_fd("\nResult:\n", 1);
 	print_board(board);

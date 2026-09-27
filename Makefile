@@ -11,11 +11,12 @@ P_INC = inc/
 P_LIBFT = libft/
 
 SRC	=	main.c 		\
-		ai.c		\
+		alphabeta.c	\
 		board.c		\
 		game.c		\
-		parsing.c \
-		alphabeta.c
+		mcts.c		\
+		parsing.c	\
+		utils.c
 
 SRCS = $(addprefix $(P_SRC), $(SRC))
 OBJS = $(patsubst $(P_SRC)%.c,$(P_OBJ)%.o,$(SRCS))

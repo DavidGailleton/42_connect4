@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/26 11:25:15 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/26 11:49:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/27 15:05:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,12 @@ void print_board(t_board *board) {
 	}
 }
 
-void free_board(t_board *board) {
-	for (unsigned int i = 0; i < board->size_y; i++) {
+void	free_board(t_board* board)
+{
+	if (!board)
+		return;
+	for (unsigned int i = 0; i < board->size_y; i++)
 		free(board->array[i]);
-	}
-	free((void *)board->array);
+	free(board->array);
 	free(board);
 }
