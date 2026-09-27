@@ -15,8 +15,8 @@ int is_overflow_underflow(char *s_int) {
 		(s_int_len > ft_strlen(s_int_min) ||
 		 (s_int_len == ft_strlen(s_int_max) &&
 		  ft_strncmp(s_int, s_int_max, s_int_len) > 0)))
-		return (1);
-	return (0);
+		return (free(s_int_max), free(s_int_min), 1);
+	return (free(s_int_max), free(s_int_min), 0);
 }
 
 int is_invalid_int(char *s) {

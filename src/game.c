@@ -196,4 +196,5 @@ void game(int size_x, int size_y) {
 	}
 	ft_putstr_fd("\nResult:\n", 1);
 	print_board(board);
+	free_board(board);
 }

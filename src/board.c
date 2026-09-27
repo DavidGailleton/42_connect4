@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "connect4.h"
+#include <stdlib.h>
 #include <unistd.h>
 
 t_board *init_board(int size_x, int size_y) {
@@ -59,4 +60,12 @@ void print_board(t_board *board) {
 		write(1, "\n", 1);
 		j++;
 	}
+}
+
+void free_board(t_board *board) {
+	for (unsigned int i = 0; i < board->size_y; i++) {
+		free(board->array[i]);
+	}
+	free((void *)board->array);
+	free(board);
 }

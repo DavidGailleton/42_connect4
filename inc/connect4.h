@@ -38,5 +38,6 @@ t_board *init_board(int size_x, int size_y);
 void game(int size_x, int size_y);
 void print_board(t_board *board);
 unsigned int select_col_ab(t_board *board, unsigned char piece);
+void free_board(t_board *board);
 
 #endif // !CONNECT4
