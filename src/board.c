@@ -27,12 +27,17 @@ t_board *init_board(int size_x, int size_y) {
 	result->array =
 		(unsigned char **)malloc(sizeof(unsigned char *) * (size_y + 1));
 	if (!result->array)
-		return (NULL); // TODO: free result
+		return (free(result), NULL);
 	i = 0;
 	while (i < size_y) {
 		result->array[i] = malloc(sizeof(unsigned char) * (size_x + 1));
-		if (!result->array[i])
-			return (NULL); // TODO: free result->array and result
+		if (!result->array[i]) {
+			for (i = i - 1; i >= 0; i--)
+				free(result->array[i]);
+			free(result->array);
+			free(result);
+			return (NULL);
+		}
 		ft_memset(result->array[i], '.', sizeof(unsigned char) * size_x);
 		result->array[i][size_x] = 0;
 		i++;

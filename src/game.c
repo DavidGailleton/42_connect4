@@ -191,6 +191,10 @@ void game(int size_x, int size_y) {
 
 	ai = rand() % 2;
 	board = init_board(size_x, size_y);
+	if (!board) {
+		ft_putstr_fd("An unknow error occured...", 2);
+		return;
+	}
 	last_column = 0;
 	player = 1;
 	while (!end_game(board, last_column)) {

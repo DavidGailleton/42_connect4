@@ -12,16 +12,14 @@
 
 #include "connect4.h"
 
-void	free_tree(t_tree* node, t_board* board)
-{
+void free_tree(t_tree *node, t_board *board) {
 	if (!node)
 		return;
 	free_children(node, board);
 	free(node);
 }
 
-void	free_children(t_tree* node, t_board* board)
-{
+void free_children(t_tree *node, t_board *board) {
 	if (!node || !node->children)
 		return;
 	for (unsigned int i = 0; i < board->size_x; i++)
@@ -31,21 +29,18 @@ void	free_children(t_tree* node, t_board* board)
 	node->children = NULL;
 }
 
-unsigned int	pseudo_ln(unsigned int n)
-{
-	unsigned int	result;
+unsigned int pseudo_ln(unsigned int n) {
+	unsigned int result;
 
 	result = 0;
-	while (n > 1)
-	{
+	while (n > 1) {
 		n *= 0.5;
 		result++;
 	}
 	return (result);
 }
 
-void	print_tree(t_tree* node, int depth, t_board* board)
-{
+void print_tree(t_tree *node, int depth, t_board *board) {
 	if (!node)
 		return;
 	for (int i = 0; i < depth; i++)
@@ -61,26 +56,22 @@ void	print_tree(t_tree* node, int depth, t_board* board)
 			print_tree(node->children[i], depth + 1, board);
 }
 
-t_board*	copy_board(t_board* board)
-{
-	t_board*	new_board;
+t_board *copy_board(t_board *board) {
+	t_board *new_board;
 
 	new_board = malloc(sizeof(t_board));
 	if (!new_board)
 		return (NULL);
 	new_board->size_x = board->size_x;
 	new_board->size_y = board->size_y;
-	new_board->array = malloc(sizeof(unsigned char*) * new_board->size_y);
-	if (!new_board->array)
-	{
+	new_board->array = malloc(sizeof(unsigned char *) * new_board->size_y);
+	if (!new_board->array) {
 		free(new_board);
 		return (NULL);
 	}
-	for (unsigned int i = 0; i < new_board->size_y; i++)
-	{
+	for (unsigned int i = 0; i < new_board->size_y; i++) {
 		new_board->array[i] = malloc(sizeof(unsigned char) * new_board->size_x);
-		if (!new_board->array[i])
-		{
+		if (!new_board->array[i]) {
 			for (unsigned int j = 0; j < i; j++)
 				free(new_board->array[j]);
 			free(new_board->array);
