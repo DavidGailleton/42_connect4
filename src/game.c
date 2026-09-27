@@ -13,6 +13,7 @@
 #include "connect4.h"
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static unsigned char column_full(t_board *board, unsigned int column) {
 	unsigned int row;
@@ -180,19 +181,16 @@ static unsigned char not_end_game(t_board *board, unsigned int last_column) {
 void game(int size_x, int size_y) {
 
 	unsigned int last_column;
-	int round;
 	unsigned char ai;
-	unsigned char player;
+	unsigned char player = rand() % 2;
 	t_board *board;
 
-	ai = 2;
-	round = 0;
+	ai = 1;
 	board = init_board(size_x, size_y);
 	last_column = 0;
 	while (not_end_game(board, last_column)) {
-		player = (round % 2) + 1;
 		last_column = play_round(board, player, ai);
-		round++;
+		player = !player;
 	}
 	ft_putstr_fd("\nResult:\n", 1);
 	print_board(board);
