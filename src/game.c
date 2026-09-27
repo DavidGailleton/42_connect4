@@ -51,8 +51,7 @@ static unsigned int get_column_to_play(t_board *board) {
 	}
 }
 
-void play_token(t_board *board, unsigned int column, unsigned char player)
-{
+void play_token(t_board *board, unsigned int column, unsigned char player) {
 	unsigned int row;
 
 	row = board->size_y - 1;
@@ -61,11 +60,10 @@ void play_token(t_board *board, unsigned int column, unsigned char player)
 	board->array[row][column] = player == 1 ? 'O' : 'X';
 }
 
-static long int play_round(t_board *board, unsigned char player, 	\
-		unsigned char ai)
-{
-	long int		tmp;
-	unsigned int	column;
+static long int play_round(t_board *board, unsigned char player,
+						   unsigned char ai) {
+	long int tmp;
+	unsigned int column;
 
 	if (player == 1)
 		ft_putstr_fd(COLOR_RED, 1);
@@ -80,8 +78,7 @@ static long int play_round(t_board *board, unsigned char player, 	\
 		column = get_column_to_play(board) - 1;
 	else if (board->size_x <= MAXSIZE_MINIMAX)
 		column = select_col_ab(board, player == 1 ? 'O' : 'X');
-	else
-	{
+	else {
 		tmp = mcts_choose_column(board);
 		if (tmp == -1)
 			return (-1);
@@ -172,9 +169,8 @@ static unsigned char four_connected(t_board *board, unsigned int last_column) {
 	return (0);
 }
 
-unsigned char	end_game(t_board *board, unsigned int last_column)
-{
-	unsigned char	last_player;
+unsigned char end_game(t_board *board, unsigned int last_column) {
+	unsigned char last_player;
 
 	last_player = four_connected(board, last_column);
 	if (last_player)
@@ -184,32 +180,27 @@ unsigned char	end_game(t_board *board, unsigned int last_column)
 	return (0);
 }
 
-void game(int size_x, int size_y)
-{
+void game(int size_x, int size_y) {
 
-	long int		tmp;
-	unsigned int	last_column;
-	unsigned int	round;
-	unsigned char	ai;
-	unsigned char	player;
-	t_board*		board;
+	long int tmp;
+	unsigned int last_column;
+	unsigned char ai;
+	unsigned char player;
+	t_board *board;
 
-	ai = rand() % 2 + 1;
+	ai = rand() % 2;
 	board = init_board(size_x, size_y);
 	last_column = 0;
-	round = 0;
-	while (!end_game(board, last_column))
-	{
-		player = (round % 2) + 1;
+	player = 1;
+	while (!end_game(board, last_column)) {
 		tmp = play_round(board, player, ai);
-		if (tmp == -1)
-		{
+		if (tmp == -1) {
 			ft_putstr_fd("Error during play_round. Exiting game.\n", 1);
 			free_board(board);
 			return;
 		}
 		last_column = (unsigned int)tmp;
-		round++;
+		player = !player;
 	}
 	ft_putstr_fd("\nResult:\n", 1);
 	print_board(board);
