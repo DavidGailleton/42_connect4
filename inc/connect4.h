@@ -2,8 +2,10 @@
 # define CONNECT4
 
 # include "libft.h"
+# include "mlx.h"
 # include <stdlib.h>
 # include <time.h>
+#include <math.h>
 
 # define COLOR_RESET "\033[0m"
 # define COLOR_BOLD "\033[1m"
@@ -27,6 +29,10 @@
 # define TIME_TO_SIMULATE 5
 # define MAXSIZE_MINIMAX 30
 
+# define WIN_WIDTH 3200
+# define WIN_HEIGHT 1800
+# define MARGIN 50
+
 typedef struct s_board {
 	unsigned int size_x;
 	unsigned int size_y;
@@ -47,6 +53,40 @@ typedef struct	s_stat
 	unsigned int	visits;
 }				t_stat;
 
+typedef struct s_mlx_img
+{
+	void			*ptr;
+	unsigned int	*img;
+	int				w;
+	int				h;
+	int				bpp;
+	int				s_l;
+	int				end;
+}t_mlx_img;
+
+typedef struct	s_mlx
+{
+	void*			mlx;
+	void*			win;
+	unsigned int	width;
+	unsigned int	height;
+	t_mlx_img		img;
+	unsigned int	cell_size;
+	unsigned int	interval_x;
+	unsigned int	interval_y;
+	t_board*		board;
+	unsigned char	ai;
+	unsigned int	round;
+}				t_mlx;
+
+typedef struct s_rgb
+{
+	int	r;
+	int	g;
+	int	b;
+	int	a;
+}t_rgb;
+
 long int		mcts_choose_column(t_board *board);
 unsigned int	pseudo_ln(unsigned int n);
 unsigned int	select_col_ab(t_board *board, unsigned char piece);
@@ -58,9 +98,15 @@ t_board*		init_board(int size_x, int size_y);
 void			free_board(t_board* board);
 void			free_children(t_tree* node, t_board* board);
 void			free_tree(t_tree* node, t_board* board);
-void			game(int size_x, int size_y);
+void			game(t_board* board);
 void			play_token(t_board *board, unsigned int column, unsigned char player);
 void			print_board(t_board *board);
 void			print_tree(t_tree* node, int depth, t_board* board);
+
+short int		loop(t_board *board, unsigned char ai, t_mlx *mlx_data, unsigned int *round, int column);
+void			mlx_draw_piece(t_mlx *mlx_data, t_board *board, unsigned char next_ai_turn);
+t_mlx*			init_mlx(t_board* board);
+int	mlx_mouse_hook_detect(int button, int x, int y, t_mlx* mlx_data);
+unsigned char	column_full(t_board *board, unsigned int column);
 
 #endif // !CONNECT4

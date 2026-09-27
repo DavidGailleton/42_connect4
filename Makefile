@@ -1,4 +1,4 @@
-.PHONY: all clean fclean re debug force
+.PHONY: all clean fclean re debug force mlx
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -MMD
@@ -15,6 +15,7 @@ SRC	=	main.c 		\
 		board.c		\
 		game.c		\
 		mcts.c		\
+		mlx.c		\
 		parsing.c	\
 		utils.c
 
@@ -22,19 +23,22 @@ SRCS = $(addprefix $(P_SRC), $(SRC))
 OBJS = $(patsubst $(P_SRC)%.c,$(P_OBJ)%.o,$(SRCS))
 DEPS = $(OBJS:.o=.d)
 LIBFT = $(P_LIBFT)libft.a
-LIBS = -L$(P_LIBFT) -lft
+LIBS = -L$(P_LIBFT) -lft -L mlx -lmlx -lXext -lX11 -lm
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(OBJS) $(LIBFT) mlx
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 
 $(P_OBJ)%.o: $(P_SRC)%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(P_INC) -I$(P_LIBFT) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(P_INC) -I$(P_LIBFT) -I mlx -c $< -o $@
 
 $(LIBFT):
 	$(MAKE) -C $(P_LIBFT)
+
+mlx:
+	$(MAKE) -C mlx
 
 clean:
 	rm -rf $(P_OBJ)

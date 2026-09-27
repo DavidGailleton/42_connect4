@@ -30,7 +30,7 @@ int is_invalid_int(char *s) {
 }
 
 int check_args(int ac, char *av[]) {
-	if (ac != 3)
+	if (ac < 3 || ac > 4)
 		return (INVALID_NB_ARGS);
 	if (is_invalid_int(av[1]) || is_invalid_int(av[2]) ||
 		is_overflow_underflow(av[1]) || is_overflow_underflow(av[2]))

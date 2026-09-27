@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/26 10:57:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/27 15:39:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/27 20:56:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static unsigned char column_full(t_board *board, unsigned int column) {
+unsigned char	column_full(t_board *board, unsigned int column)
+{
 	unsigned int row;
 
 	row = 0;
@@ -62,7 +63,7 @@ void play_token(t_board *board, unsigned int column, unsigned char player)
 }
 
 static long int play_round(t_board *board, unsigned char player, 	\
-		unsigned char ai)
+		unsigned char ai, int preset_column)
 {
 	long int		tmp;
 	unsigned int	column;
@@ -70,14 +71,19 @@ static long int play_round(t_board *board, unsigned char player, 	\
 	if (player == 1)
 		ft_putstr_fd(COLOR_RED, 1);
 	else
-		ft_putstr_fd(COLOR_BLUE, 1);
+		ft_putstr_fd(COLOR_YELLOW, 1);
 	ft_putstr_fd("\nPlayer ", 1);
 	ft_putstr_fd(player == 1 ? "1" : "2", 1);
 	ft_putstr_fd("'s turn\n", 1);
 	ft_putstr_fd(COLOR_RESET, 1);
 	print_board(board);
 	if (player != ai)
-		column = get_column_to_play(board) - 1;
+	{
+		if (preset_column == -1)
+			column = get_column_to_play(board) - 1;
+		else
+			column = (unsigned int)preset_column;
+	}
 	else if (board->size_x <= MAXSIZE_MINIMAX)
 		column = select_col_ab(board, player == 1 ? 'O' : 'X');
 	else
@@ -88,9 +94,9 @@ static long int play_round(t_board *board, unsigned char player, 	\
 		column = (unsigned int)tmp;
 	}
 	play_token(board, column, player);
-	ft_putstr_fd("\ncolumn chosen: ", 1);
-	ft_putnbr_fd(column, 1);
-	ft_putstr_fd("\n", 1);
+	// ft_putstr_fd("\ncolumn chosen: ", 1);
+	// ft_putnbr_fd(column, 1);
+	// ft_putstr_fd("\n", 1);
 	return (column);
 }
 
@@ -184,33 +190,37 @@ unsigned char	end_game(t_board *board, unsigned int last_column)
 	return (0);
 }
 
-void game(int size_x, int size_y)
+short int	loop(t_board *board, unsigned char ai, t_mlx *mlx_data, unsigned int *round, int column)
+{
+	unsigned char	player;
+	long int		last_column;
+
+	player = *round % 2 + 1;
+	last_column = play_round(board, player, ai, column);
+	if (mlx_data)
+		mlx_draw_piece(mlx_data, board, player == ai);
+	if (last_column == -1)
+	{
+		ft_putstr_fd("Error during play_round. Exiting game.\n", 1);
+		free_board(board);
+		return (-1);
+	}
+	(*round)++;
+	return ((short int)end_game(board, (unsigned int)last_column));
+}
+
+void	game(t_board *board)
 {
 
-	long int		tmp;
-	unsigned int	last_column;
 	unsigned int	round;
 	unsigned char	ai;
-	unsigned char	player;
-	t_board*		board;
+	short int		status;
 
 	ai = rand() % 2 + 1;
-	board = init_board(size_x, size_y);
-	last_column = 0;
 	round = 0;
-	while (!end_game(board, last_column))
-	{
-		player = (round % 2) + 1;
-		tmp = play_round(board, player, ai);
-		if (tmp == -1)
-		{
-			ft_putstr_fd("Error during play_round. Exiting game.\n", 1);
-			free_board(board);
-			return;
-		}
-		last_column = (unsigned int)tmp;
-		round++;
-	}
+	status = 0;
+	while (!status)
+		status = loop(board, ai, NULL, &round, -1);
 	ft_putstr_fd("\nResult:\n", 1);
 	print_board(board);
 	free_board(board);

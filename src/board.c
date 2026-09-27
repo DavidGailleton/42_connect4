@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/26 11:25:15 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/27 15:05:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/27 17:59:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void print_board(t_board *board) {
 			if (board->array[j][i] == 'O')
 				ft_putstr_fd(COLOR_RED, 1);
 			else if (board->array[j][i] == 'X')
+				ft_putstr_fd(COLOR_YELLOW, 1);
+			else
 				ft_putstr_fd(COLOR_BLUE, 1);
 			write(1, &board->array[j][i], 1);
 			ft_putstr_fd(COLOR_RESET, 1);

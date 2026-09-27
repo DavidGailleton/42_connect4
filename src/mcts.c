@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/26 14:45:48 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/27 14:55:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/27 21:23:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,11 +216,11 @@ unsigned int	find_max_visits(t_tree* tree, t_board* board)
 			best_column = i;
 		}
 	}
-	ft_putstr_fd("Best column: ", 1);
-	ft_putnbr_fd(best_column, 1);
-	ft_putstr_fd(" (", 1);
-	ft_putnbr_fd(max_visits, 1);
-	ft_putstr_fd(" visits)\n", 1);
+	// ft_putstr_fd("Best column: ", 1);
+	// ft_putnbr_fd(best_column, 1);
+	// ft_putstr_fd(" (", 1);
+	// ft_putnbr_fd(max_visits, 1);
+	// ft_putstr_fd(" visits)\n", 1);
 	return (best_column);
 }
 
