@@ -1,26 +1,46 @@
 #include "connect4.h"
 #include <limits.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 
 const int MAX_DEPTH = 5;
 const int WIN_SCORE = 100000;
 
-static int ft_sqrt(int nb) {
-	int x;
-	int y;
+static double ft_log2(double x) {
+	union {
+		double d;
+		uint64_t u;
+	} bits;
+	int64_t exponent;
+	double mantissa;
+	double frac;
+	int i;
 
-	if (nb < 0)
-		return (-1);
-	if (nb < 2)
-		return (nb);
+	bits.d = x;
+	exponent = (int64_t)((bits.u >> 52) & 0x7FF) - 1023;
+	bits.u = (bits.u & 0x000FFFFFFFFFFFFFULL) | 0x3FF0000000000000ULL;
+	mantissa = bits.d;
 
-	x = nb;
-	y = (x + 1) / 2;
-	while (y < x) {
-		x = y;
-		y = (x + nb / x) / 2;
+	frac = 0.0;
+	i = 0;
+	while (i < 32) {
+		mantissa = mantissa * mantissa;
+		if (mantissa >= 2.0) {
+			frac += 1.0 / (double)(1ULL << (i + 1));
+			mantissa /= 2.0;
+		}
+		i++;
 	}
-	return (x);
+	return ((double)exponent + frac);
+}
+
+static int get_max_depth(t_board *board) {
+	size_t size = (size_t)board->size_x * (size_t)board->size_y;
+
+	if (size <= 1)
+		return (0);
+	return ((int)(20.0 - 2 * ft_log2((double)size) + 1e-12));
 }
 
 static unsigned int col_order(t_board *board, unsigned int i) {
@@ -197,7 +217,7 @@ unsigned int select_col_ab(t_board *board, unsigned char piece) {
 	unsigned int col_max = board->size_x / 2;
 	int temp_score;
 	int row;
-	int max_depth = 15 - ft_sqrt((int)board->size_y * (int)board->size_x);
+	int max_depth = get_max_depth(board);
 
 	if (max_depth < 3)
 		max_depth = 3;
