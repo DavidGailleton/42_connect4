@@ -5,6 +5,24 @@
 const int MAX_DEPTH = 5;
 const int WIN_SCORE = 100000;
 
+static int ft_sqrt(int nb) {
+	int x;
+	int y;
+
+	if (nb < 0)
+		return (-1);
+	if (nb < 2)
+		return (nb);
+
+	x = nb;
+	y = (x + 1) / 2;
+	while (y < x) {
+		x = y;
+		y = (x + nb / x) / 2;
+	}
+	return (x);
+}
+
 static unsigned int col_order(t_board *board, unsigned int i) {
 	return (i % 2 ? board->size_x / 2 - (i + 1) / 2
 				  : board->size_x / 2 + i / 2);
@@ -179,6 +197,10 @@ unsigned int select_col_ab(t_board *board, unsigned char piece) {
 	unsigned int col_max = board->size_x / 2;
 	int temp_score;
 	int row;
+	int max_depth = 15 - ft_sqrt((int)board->size_y * (int)board->size_x);
+
+	if (max_depth < 3)
+		max_depth = 3;
 
 	for (unsigned int i = 0; i < board->size_x; i++) {
 		unsigned int col = col_order(board, i);
@@ -189,10 +211,10 @@ unsigned int select_col_ab(t_board *board, unsigned char piece) {
 		row = add_piece(board, col, piece);
 
 		if (is_winning_move(board, row, (int)col))
-			temp_score = WIN_SCORE + MAX_DEPTH;
+			temp_score = WIN_SCORE + max_depth;
 		else
 			temp_score = alphabeta(board, INT_MIN, INT_MAX, opponent(piece),
-								   piece, MAX_DEPTH - 1);
+								   piece, max_depth - 1);
 
 		remove_piece(board, col);
 		// printf("col %d: %d\n", col, temp_score);
