@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/26 10:57:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/26 19:29:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/27 14:55:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ void play_token(t_board *board, unsigned int column, unsigned char player)
 	board->array[row][column] = player == 1 ? 'O' : 'X';
 }
 
-static unsigned int play_round(t_board *board, unsigned char player, 	\
+static long int play_round(t_board *board, unsigned char player, 	\
 		unsigned char ai)
 {
-	unsigned int column;
+	long int		tmp;
+	unsigned int	column;
 
 	if (player == 1)
 		ft_putstr_fd(COLOR_RED, 1);
@@ -74,13 +75,15 @@ static unsigned int play_round(t_board *board, unsigned char player, 	\
 	ft_putstr_fd("'s turn\n", 1);
 	ft_putstr_fd(COLOR_RESET, 1);
 	print_board(board);
-
 	if (player == ai)
-		column = ai_choose_column(board);
+	{
+		tmp = mcts_choose_column(board);
+		if (tmp == -1)
+			return (-1);
+		column = (unsigned int)tmp;
+	}
 	else
 		column = get_column_to_play(board) - 1;
-	// (void)ai;
-	// (void)get_column_to_play;
 	play_token(board, column, player);
 	return (column);
 }
@@ -175,8 +178,10 @@ unsigned char	end_game(t_board *board, unsigned int last_column)
 	return (0);
 }
 
-void game(int size_x, int size_y) {
+void game(int size_x, int size_y)
+{
 
+	long int tmp;
 	unsigned int last_column;
 	int round;
 	unsigned char ai;
@@ -189,7 +194,14 @@ void game(int size_x, int size_y) {
 	last_column = 0;
 	while (!end_game(board, last_column)) {
 		player = (round % 2) + 1;
-		last_column = play_round(board, player, ai);
+		tmp = play_round(board, player, ai);
+		if (tmp == -1)
+		{
+			ft_putstr_fd("Error during play_round. Exiting game.\n", 1);
+			free_board(board);
+			return;
+		}
+		last_column = (unsigned int)tmp;
 		round++;
 	}
 	ft_putstr_fd("\nResult:\n", 1);
