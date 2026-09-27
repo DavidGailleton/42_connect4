@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "connect4.h"
+#include "libft.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -204,5 +205,18 @@ void game(int size_x, int size_y) {
 	}
 	ft_putstr_fd("\nResult:\n", 1);
 	print_board(board);
+	ft_putstr_fd("\n", 1);
+	if (player) {
+		ft_putstr_fd(COLOR_BLUE, 1);
+		ft_putstr_fd("X", 1);
+	} else {
+		ft_putstr_fd(COLOR_RED, 1);
+		ft_putstr_fd("O", 1);
+	}
+	if (ai != player)
+		ft_putstr_fd(" (AI)", 1);
+	ft_putstr_fd(COLOR_GREEN, 1);
+	ft_putstr_fd(" Win !!\n", 1);
+	ft_putstr_fd(COLOR_RESET, 1);
 	free_board(board);
 }
